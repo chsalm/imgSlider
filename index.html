@@ -30,79 +30,52 @@
     </li>
 </script>
 <script>
-    var Slider = function() {
-        this._sliderImageDom = document.querySelector('.bannerImg');
-        this._sliderImageList = [
-            './img/@promotion01.jpg',
-            './img/@promotion02.jpg',
-            './img/@promotion03.jpg',
-            './img/@promotion04.jpg',
-            './img/@promotion05.jpg',
-            './img/@promotion06.jpg'
-        ];
-        this._currentIndex = 0;
-        this._numberOfSliderImage = this._sliderImageList.length;
-        this._dotStr = document.querySelector('#dotTemplate').text;
-        this._elementOfDots;
-    };
+  const sliderImageList = [
+      './img/@promotion01.jpg',
+      './img/@promotion02.jpg',
+      './img/@promotion03.jpg',
+      './img/@promotion04.jpg',
+      './img/@promotion05.jpg',
+      './img/@promotion06.jpg'
+  ];
 
-    Slider.prototype._renderDots = function () {
-        var dotsStr = '';
-        for (var index = 0; index < this._numberOfSliderImage; index++) {
-            dotsStr += this._dotStr;
-        }
-        document.querySelector('.container').innerHTML = dotsStr;
-        this._elementOfDots = document.querySelectorAll('.dot');
-    };
+  const sliderImageDom = document.querySelector('.bannerImg');
 
-    Slider.prototype.onClickNextImage = function () {
-        var newIndex = (this._currentIndex >= this._numberOfSliderImage - 1) ? 0 : this._currentIndex + 1;
-        this._execute(newIndex);
-    };
+  let currentIndex = 0;
 
-    Slider.prototype.onClickPrevImage = function () {
-        var newIndex = (this._currentIndex <= 0) ? _numberOfSliderImage - 1 : this._currentIndex - 1;
-        this._execute(newIndex);
-    };
+  numberOfSliderImage = this._;
 
-    Slider.prototype._execute = function (newIndex) {
-        this._offDot();
-        this._currentIndex = newIndex;
-        this._changeImage();
-        this._onDot();
-    };
+  const setImg = function(item) {
+    sliderImageDom.src = item;
+  };
 
-    Slider.prototype._changeImage = function () {
-        this._sliderImageDom.src = this._sliderImageList[this._currentIndex];
-    };
+  const onClicPrevImg = function() {
+    if(currentIndex === 0) {
+      currentIndex = sliderImageList.length-1;
+      setImg(sliderImageList[currentIndex]);
+    } else {
+      currentIndex--;
+      setImg(sliderImageList[currentIndex]);
+    }
+  };
 
-    Slider.prototype._onDot = function () {
-        this._elementOfDots[this._currentIndex].classList.add('on');
-    };
+  const onClicNextImg = function() {
+    if(currentIndex === sliderImageList.length-1) {
+      currentIndex = 0;
+      setImg(sliderImageList[currentIndex]);
+    } else {
+      currentIndex++;
+      setImg(sliderImageList[currentIndex]);
+    }
+  };
 
-    Slider.prototype._offDot = function () {
-        this._elementOfDots[this._currentIndex].classList.remove('on');
-    };
+  const init = function() {
+    setImg(sliderImageList[currentIndex]);
+    document.querySelector('.prev').addEventListener("click", onClicPrevImg);
+    document.querySelector('.next').addEventListener("click", onClicNextImg);
+    setInterval(onClicNextImg, 3000);
+  }();
 
-    Slider.prototype._setEventListener = function () {
-        document.querySelector('.prev').addEventListener("click", this.onClickPrevImage.bind(this));
-        document.querySelector('.next').addEventListener("click", this.onClickNextImage.bind(this));
-    };
-
-    Slider.prototype._autoPlayImageSlide = function () {
-        setInterval(this.onClickNextImage.bind(this), 3000);
-    };
-
-    Slider.prototype.init = function () {
-        this._setEventListener();
-        this._renderDots();
-        this._changeImage();
-        this._onDot();
-        this._autoPlayImageSlide();
-    };
-
-    var sliderInstance = new Slider();
-    sliderInstance.init();
 </script>
 </body>
 </html>
