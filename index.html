@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+<div class="row mg">
+    <div class="contents">
+        <div class="img_area">
+            <a href="#">
+                <img src="" class="bannerImg">
+            </a>
+        </div>
+        <div class="arraw_area">
+            <a href="#" class="prev">이전</a>
+            <a href="#" class="next">다음</a>
+        </div>
+        <div class="circle_area">
+            <ul class="container">
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="template/javascript" id="dotTemplate">
+    <li class='dot'>
+        <a href='#'></a>
+    </li>
+</script>
+<script>
+    var Slider = function() {
+        this._sliderImageDom = document.querySelector('.bannerImg');
+        this._sliderImageList = [
+            './img/@promotion01.jpg',
+            './img/@promotion02.jpg',
+            './img/@promotion03.jpg',
+            './img/@promotion04.jpg',
+            './img/@promotion05.jpg',
+            './img/@promotion06.jpg'
+        ];
+        this._currentIndex = 0;
+        this._numberOfSliderImage = this._sliderImageList.length;
+        this._dotStr = document.querySelector('#dotTemplate').text;
+        this._elementOfDots;
+    };
+
+    Slider.prototype._renderDots = function () {
+        var dotsStr = '';
+        for (var index = 0; index < this._numberOfSliderImage; index++) {
+            dotsStr += this._dotStr;
+        }
+        document.querySelector('.container').innerHTML = dotsStr;
+        this._elementOfDots = document.querySelectorAll('.dot');
+    };
+
+    Slider.prototype.onClickNextImage = function () {
+        var newIndex = (this._currentIndex >= this._numberOfSliderImage - 1) ? 0 : this._currentIndex + 1;
+        this._execute(newIndex);
+    };
+
+    Slider.prototype.onClickPrevImage = function () {
+        var newIndex = (this._currentIndex <= 0) ? _numberOfSliderImage - 1 : this._currentIndex - 1;
+        this._execute(newIndex);
+    };
+
+    Slider.prototype._execute = function (newIndex) {
+        this._offDot();
+        this._currentIndex = newIndex;
+        this._changeImage();
+        this._onDot();
+    };
+
+    Slider.prototype._changeImage = function () {
+        this._sliderImageDom.src = this._sliderImageList[this._currentIndex];
+    };
+
+    Slider.prototype._onDot = function () {
+        this._elementOfDots[this._currentIndex].classList.add('on');
+    };
+
+    Slider.prototype._offDot = function () {
+        this._elementOfDots[this._currentIndex].classList.remove('on');
+    };
+
+    Slider.prototype._setEventListener = function () {
+        document.querySelector('.prev').addEventListener("click", this.onClickPrevImage.bind(this));
+        document.querySelector('.next').addEventListener("click", this.onClickNextImage.bind(this));
+    };
+
+    Slider.prototype._autoPlayImageSlide = function () {
+        setInterval(this.onClickNextImage.bind(this), 3000);
+    };
+
+    Slider.prototype.init = function () {
+        this._setEventListener();
+        this._renderDots();
+        this._changeImage();
+        this._onDot();
+        this._autoPlayImageSlide();
+    };
+
+    var sliderInstance = new Slider();
+    sliderInstance.init();
+</script>
+</body>
+</html>
